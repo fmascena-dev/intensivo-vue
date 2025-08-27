@@ -46,16 +46,22 @@ export default {
 }
 
 .movies h1 {
-    margin: 2rem;
+    margin: 2rem 0;
     font-family: var(--font-two);
     font-size: 3.5rem;
     text-align: center;
 }
 
+.movies h3 {
+    margin-top: 0.5rem;
+    font-size: 1.8rem;
+    color: var(--text-gray);
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 1.5rem;
+    gap: 2rem;
     margin-top: 5rem;
 }
 

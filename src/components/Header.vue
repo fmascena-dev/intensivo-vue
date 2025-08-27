@@ -9,7 +9,7 @@ import Navbar from './Navbar.vue';
     <nav>
       <Router-link to="/home">Home</Router-link>
       <Router-link to="/movies">Filmes</Router-link>
-      <Router-link>Séries</Router-link>
+      <Router-link to="/series">Séries</Router-link>
     </nav>
   </header>
   <Navbar />
