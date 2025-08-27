@@ -1,9 +1,51 @@
+:root {
+  --font: "Roboto", sans-serif;
+  --font-two: "Rubik Distressed", cursive;
+  --blue: #00a3ff;
+  --medium-blue: #151b26;
+  --dark-blue: #06090f;
+  --white: #fff;
+  --gray: #20293a;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 62.5%;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  background-color: #242424;
   font-family: 'Roboto';
   line-height: 1.5;
   font-weight: 400;
+}
+
+body {
+  background: var(--dark-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font);
+}
+
+::-webkit-scrollbar {
+  width: 0.5rem;
+  height: 0.5rem;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark-blue);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--gray);
+}
+
+@supports (scrollbar-color: #20293a #0c111a) {
+  * {
+    scrollbar-color: #20293a #0c111a;
+    scrollbar-width: auto;
+  }
 }
