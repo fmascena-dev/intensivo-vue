@@ -1,150 +1,127 @@
-<script>
-import { onBeforeMount, onMounted, ref } from "vue";
-
-export default {
-  name: "Navbar",
-  setup() {
-    const letters = [
-      "Todos",
-      "A",
-      "B",
-      "C",
-      "D",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "J",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "P",
-      "Q",
-      "R",
-      "S",
-      "T",
-      "U",
-      "V",
-      "W",
-      "X",
-      "Y",
-      "Z",
-    ];
-    const activeLetter = ref("Todos");
-    const navbar = ref(null);
-
-    const setActive = (letter) => {
-      activeLetter.value = letter;
-    };
-
-    const scrollHorizontally = (e) => {
-      const delta = Math.sign(e.deltaY);
-      if (navbar.value) {
-        navbar.value.scrollLeft += delta * 40;
-      }
-      e.preventDefault();
-    };
-
-    onMounted(() => {
-      if (navbar.value) {
-        navbar.value.addEventListener("wheel", scrollHorizontally, {
-          passive: true,
-        });
-      }
-    });
-
-    onBeforeMount(() => {
-      if (navbar.value) {
-        navbar.value.removeEventListener("wheel", scrollHorizontally);
-      }
-    });
-
-    return {
-      letters,
-      activeLetter,
-      setActive,
-      navbar,
-    };
-  },
-};
-</script>
-
 <template>
-  <section class="navbar-section">
-    <nav class="navbar" ref="navbar">
-      <Router-link
-      to="#"
-        v-for="(letter, index) in letters"
-        :key="index"
-        class="navlink"
-        :class="{ todos: letter === 'Todos', active: activeLetter === letter }"
-        @click.prevent="setActive(letter)"
-      >
-        {{ letter }}
-      </Router-link>
-    </nav>
-  </section>
+  <nav class="navbar">
+    <div class="container">
+      <div class="navbar-content">
+        <RouterLink to="/" class="navbar-brand">
+          <h1>MovieApp</h1>
+        </RouterLink>
+
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <RouterLink to="/" class="nav-link">Home</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/movies" class="nav-link">Filmes</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/series" class="nav-link">Séries</RouterLink>
+          </li>
+          <li class="nav-item">
+            <RouterLink to="/favorites" class="nav-link">Favoritos</RouterLink>
+          </li>
+        </ul>
+
+        <div class="navbar-actions">
+          <span class="user-name">Olá, {{ authStore.user?.name }}</span>
+          <button @click="handleLogout" class="btn btn-ghost">Sair</button>
+        </div>
+      </div>
+    </div>
+  </nav>
 </template>
 
-<style scoped>
-.navbar-section {
-  width: 100%;
-  height: auto;
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-  padding-inline: 1.5rem;
-}
+<script setup>
+import { RouterLink, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 
+const router = useRouter()
+const authStore = useAuthStore()
+
+const handleLogout = () => {
+  authStore.logout()
+  router.push('/login')
+}
+</script>
+
+<style lang="scss" scoped>
 .navbar {
-  padding-block: 1rem 3rem;
-  max-width: 120rem;
-  width: 100%;
+  background-color: $background-secondary;
+  border-bottom: 1px solid $border-color;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.navbar-content {
   display: flex;
-  column-gap: 2rem;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  white-space: nowrap;
-  overscroll-behavior-inline: contain;
+  align-items: center;
+  justify-content: space-between;
+  padding: $spacing-md 0;
 }
 
-.navlink {
-  color: var(--white);
-  display: inline-block;
+.navbar-brand {
   text-decoration: none;
-  text-align: center;
-  background-color: var(--dark-blue);
-  border: 0.1rem solid var(--gray);
-  border-radius: 100vmax;
-  padding: 0.2rem 2.5rem;
-  font-size: 1.8rem;
-  transition: all 0.3s ease;
-  user-select: none;
+
+  h1 {
+    color: $accent-primary;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+  }
 }
 
-.navlink:hover,
-.navlink.active {
-  background: var(--gray);
+.navbar-nav {
+  display: flex;
+  list-style: none;
+  gap: $spacing-lg;
+
+  .nav-item {
+    .nav-link {
+      color: $text-secondary;
+      text-decoration: none;
+      font-weight: 500;
+      padding: $spacing-sm $spacing-md;
+      border-radius: $border-radius-sm;
+      transition: all 0.3s ease;
+
+      &:hover {
+        color: $text-primary;
+        background-color: $background-tertiary;
+      }
+
+      &.router-link-active {
+        color: $accent-primary;
+        background-color: rgba(229, 9, 20, 0.1);
+      }
+    }
+  }
 }
 
-.navlink.todos {
-  background: var(--medium-blue);
-  border: 0.1rem solid var(--gray);
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  .user-name {
+    color: $text-secondary;
+    font-size: 0.9rem;
+  }
 }
 
-.navlink.todos:hover,
-.navlink.todos.active {
-  border: 0.1rem solid var(--gray);
-}
+@media (max-width: $mobile) {
+  .navbar-content {
+    flex-direction: column;
+    gap: $spacing-md;
+  }
 
-@media (max-width: 500px) {
-  .navlink {
-    min-width: 7rem;
-    height: 4.6rem;
-    font-size: 1.4rem;
+  .navbar-nav {
+    gap: $spacing-sm;
+  }
+
+  .navbar-actions {
+    .user-name {
+      display: none;
+    }
   }
 }
 </style>
