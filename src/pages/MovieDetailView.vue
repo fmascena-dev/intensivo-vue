@@ -246,7 +246,7 @@ onMounted(() => {
 
 .hero-section {
   position: relative;
-  min-height: 80vh;
+  min-height: 100vh;
 }
 
 .hero-backdrop {
