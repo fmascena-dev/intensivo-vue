@@ -18,11 +18,19 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const initializeAuth = () => {
-    const savedAuth = localStorage.getItem('auth')
-    if (savedAuth) {
-      const authData = JSON.parse(savedAuth)
-      isAuthenticated.value = authData.isAuthenticated
-      user.value = authData.user
+    try {
+      const savedAuth = localStorage.getItem('auth')
+      if (savedAuth) {
+        const authData = JSON.parse(savedAuth)
+        if (authData.isAuthenticated && authData.user) {
+          isAuthenticated.value = true
+          user.value = authData.user
+        }
+      }
+    } catch (error) {
+      console.error('Error initializing auth:', error)
+      // Clear invalid data
+      localStorage.removeItem('auth')
     }
   }
 
